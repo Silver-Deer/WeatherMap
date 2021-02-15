@@ -20,7 +20,7 @@ class MainViewModel(private val context: Context) : ViewModel() {
 
     fun fetchWeatherList() {
         myCities.value?.let {
-            weatherList = weatherRepository.getWeathers(it.map { return@map it.city })
+            weatherList = weatherRepository.getWeathers(it)
         }
     }
 }

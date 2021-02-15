@@ -27,12 +27,10 @@ class MainActivity : AppCompatActivity() {
         binding.adapter = weatherAdapter
         binding.lifecycleOwner = this
 
-
-
         viewModel.cityRepository.signal.observe(this, {
             viewModel.fetchWeatherList()
             viewModel.weatherList.observe(this, {
-                weatherAdapter.submitList(it.sortedBy { it.name })
+                weatherAdapter.submitList(it.sortedBy { it.id })
             })
         })
 

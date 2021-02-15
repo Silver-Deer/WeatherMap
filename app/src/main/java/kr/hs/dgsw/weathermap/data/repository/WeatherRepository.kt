@@ -3,6 +3,7 @@ package kr.hs.dgsw.weathermap.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kr.hs.dgsw.weathermap.data.data_source.WeatherRemoteDataSource
+import kr.hs.dgsw.weathermap.data.model.entity.City
 import kr.hs.dgsw.weathermap.data.model.response_model.WeatherResponse
 
 class WeatherRepository {
@@ -14,7 +15,7 @@ class WeatherRepository {
         return weatherRemoteDataSource.weatherResponse
     }
 
-    fun getWeathers(cities: List<String>): LiveData<List<WeatherResponse>> {
+    fun getWeathers(cities: List<City>): LiveData<List<WeatherResponse>> {
         weatherRemoteDataSource.resetList()
         weatherRemoteDataSource.getWeatherList(cities)
 
