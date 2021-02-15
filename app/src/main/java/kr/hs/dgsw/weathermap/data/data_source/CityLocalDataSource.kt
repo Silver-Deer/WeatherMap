@@ -21,68 +21,67 @@ class CityLocalDataSource(private val context: Context) {
     fun getMyCities(signal: MutableLiveData<Unit>) {
         try {
             CityDatabase.getInstance(context.applicationContext)?.getDao()?.getMyCities()
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(
-                    {
-                        _myCites.value = it
-                        signal.value = Unit
-                    },
-                    {
-                        if (it is SQLException) {
-                            Log.d("City Error", "${it.sqlState} : ${it.message}")
-                        } else
-                            Log.d("City Error", "${it.message}")
+                    ?.subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe(
+                            {
+                                _myCites.value = it
+                                signal.value = Unit
+                            },
+                            {
+                                if (it is SQLException) {
+                                    Log.d("City Error", "${it.sqlState} : ${it.message}")
+                                } else
+                                    Log.d("City Error", "${it.message}")
+                            }
+                    )?.let {
+                        compositeDisposable.add(
+                                it
+                        )
                     }
-                )?.let {
-                    compositeDisposable.add(
-                        it
-                    )
-                }
         } catch (e: Exception) {
             Log.d("City Error", "${e.message}")
         }
     }
 
     fun addCity(s: String) {
-        val city = City(s)
+        val city = City(0, s)
 
         try {
             CityDatabase.getInstance(context.applicationContext)?.getDao()?.insertCity(city)
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe({
-                    Log.d("City", "Insert ${city.city}")
-                }, {
-                    if (it is SQLException)
-                        Log.d("City Error", "${it.sqlState} : ${it.message}")
-                    else Log.d("City Error", "${it.message}")
-                })
-                ?.let {
-                    compositeDisposable.add(it)
-                }
+                    ?.subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe({
+                        Log.d("City", "Insert ${city.city}")
+                    }, {
+                        if (it is SQLException)
+                            Log.d("City Error", "${it.sqlState} : ${it.message}")
+                        else Log.d("City Error", "${it.message}")
+                    })
+                    ?.let {
+                        compositeDisposable.add(it)
+                    }
         } catch (e: Exception) {
             Log.d("City Error", "${e.message}")
         }
     }
 
-    fun deleteCity(s: String) {
-        val city = City(s)
+    fun deleteCity(city: String) {
 
         try {
-            CityDatabase.getInstance(context.applicationContext)?.getDao()?.deleteCity(city)
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe({
-                    Log.d("City", "Delete ${city.city}")
-                }, {
-                    if (it is SQLException)
-                        Log.d("City Error", "${it.sqlState} : ${it.message}")
-                    else Log.d("City Error", "${it.message}")
-                })
-                ?.let {
-                    compositeDisposable.add(it)
-                }
+            CityDatabase.getInstance(context.applicationContext)?.getDao()?.deleteCityByName(city)
+                    ?.subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe({
+                        Log.d("City", "Delete ${city}")
+                    }, {
+                        if (it is SQLException)
+                            Log.d("City Error", "${it.sqlState} : ${it.message}")
+                        else Log.d("City Error", "${it.message}")
+                    })
+                    ?.let {
+                        compositeDisposable.add(it)
+                    }
         } catch (e: Exception) {
             Log.d("City Error", "${e.message}")
         }
