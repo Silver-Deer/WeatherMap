@@ -2,6 +2,7 @@ package kr.hs.dgsw.weathermap.presentation.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
@@ -10,12 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.hs.dgsw.weathermap.R
 import kr.hs.dgsw.weathermap.data.model.response_model.WeatherResponse
 import kr.hs.dgsw.weathermap.databinding.ItemWeatherBinding
+import kotlin.math.roundToInt
 
 class MainWeatherAdapter(private val lifecycleOwner: LifecycleOwner) : ListAdapter<WeatherResponse, MainWeatherAdapter.WeatherViewHolder>(WeatherDiffUtilCallback) {
     inner class WeatherViewHolder(private val binding: ItemWeatherBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(weather: WeatherResponse) {
             binding.weather = weather
             binding.lifecycleOwner = lifecycleOwner
+            val temp = (((weather.main.temp-273.15)*100).roundToInt() / 100F).toString()
+            binding.root.findViewById<TextView>(R.id.tv_item_main_temp).text = this.itemView.resources.getString(R.string.temp, temp)
+            binding.root.findViewById<TextView>(R.id.tv_item_current_weather).text = weather.weather[0].description
         }
     }
 
