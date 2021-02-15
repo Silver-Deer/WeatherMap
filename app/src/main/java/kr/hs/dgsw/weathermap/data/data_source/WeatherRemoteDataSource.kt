@@ -16,33 +16,74 @@ class WeatherRemoteDataSource {
     val weatherResponse: LiveData<WeatherResponse>
         get() = _weatherResponse
 
+    private val _weatherResponseList = MutableLiveData<ArrayList<WeatherResponse>>()
+    private val __weatherResponseList = MutableLiveData<List<WeatherResponse>>()
+    val weatherResponseList: LiveData<List<WeatherResponse>>
+        get() = __weatherResponseList
+
+
+    fun resetList() {
+        _weatherResponseList.value = ArrayList()
+    }
+
     private val compositeDisposable = CompositeDisposable()
 
     fun getWeather(city: String) {
         try {
             compositeDisposable.add(
-                WeatherClient.getClient().getWeather(city)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        {
-                            _weatherResponse.value = it
-                        },
-                        {
-                            if (it is HttpException) {
-                                val error =
-                                    WeatherClient.retrofit.responseBodyConverter<ErrorResponse>(
-                                        ErrorResponse::class.java,
-                                        ErrorResponse::class.java.annotations
-                                    ).convert(it.response()?.errorBody())
-                                Log.d("Weather Error", "${error?.cod}:${error?.message}")
-                            } else Log.d("Weather Error", "${it.message}")
-                        }
-                    )
+                    WeatherClient.getClient().getWeather(city)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    {
+                                        _weatherResponse.value = it
+                                    },
+                                    {
+                                        if (it is HttpException) {
+                                            val error =
+                                                    WeatherClient.retrofit.responseBodyConverter<ErrorResponse>(
+                                                            ErrorResponse::class.java,
+                                                            ErrorResponse::class.java.annotations
+                                                    ).convert(it.response()?.errorBody())
+                                            Log.d("Weather Error", "${error?.cod}:${error?.message}")
+                                        } else Log.d("Weather Error", "${it.message}")
+                                    }
+                            )
             )
         } catch (e: Exception) {
             Log.d("Weather Error", "${e.message}")
         }
     }
+
+    fun getWeatherList(cities: List<String>) {
+        cities.forEach { city ->
+            try {
+                compositeDisposable.add(
+                        WeatherClient.getClient().getWeather(city)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        {
+                                            _weatherResponseList.value?.add(it)
+                                            __weatherResponseList.value = _weatherResponseList.value?.toList()
+                                        },
+                                        {
+                                            if (it is HttpException) {
+                                                val error =
+                                                        WeatherClient.retrofit.responseBodyConverter<ErrorResponse>(
+                                                                ErrorResponse::class.java,
+                                                                ErrorResponse::class.java.annotations
+                                                        ).convert(it.response()?.errorBody())
+                                                Log.d("Weather Error", "${error?.cod}:${error?.message}")
+                                            } else Log.d("Weather Error", "${it.message}")
+                                        }
+                                )
+                )
+            } catch (e: Exception) {
+            }
+
+        }
+    }
+
 
 }

@@ -18,7 +18,7 @@ class CityLocalDataSource(private val context: Context) {
 
     private val compositeDisposable = CompositeDisposable()
 
-    fun getMyCities() {
+    fun getMyCities(signal: MutableLiveData<Unit>) {
         try {
             CityDatabase.getInstance(context.applicationContext)?.getDao()?.getMyCities()
                 ?.subscribeOn(Schedulers.io())
@@ -26,6 +26,7 @@ class CityLocalDataSource(private val context: Context) {
                 ?.subscribe(
                     {
                         _myCites.value = it
+                        signal.value = Unit
                     },
                     {
                         if (it is SQLException) {
