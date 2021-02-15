@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kr.hs.dgsw.weathermap.data.api.WeatherClient
+import kr.hs.dgsw.weathermap.data.model.entity.City
 import kr.hs.dgsw.weathermap.data.model.response_model.ErrorResponse
 import kr.hs.dgsw.weathermap.data.model.response_model.WeatherResponse
 import retrofit2.HttpException
@@ -55,15 +56,16 @@ class WeatherRemoteDataSource {
         }
     }
 
-    fun getWeatherList(cities: List<String>) {
+    fun getWeatherList(cities: List<City>) {
         cities.forEach { city ->
             try {
                 compositeDisposable.add(
-                        WeatherClient.getClient().getWeather(city)
+                        WeatherClient.getClient().getWeather(city.city)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
                                         {
+                                            it.id = city.id
                                             _weatherResponseList.value?.add(it)
                                             __weatherResponseList.value = _weatherResponseList.value?.toList()
                                         },

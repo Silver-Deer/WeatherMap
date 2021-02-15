@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import kr.hs.dgsw.weathermap.data.model.entity.City
 
-@Database(entities = [City::class], version = 1)
+@Database(entities = [City::class], version = 2)
 abstract class CityDatabase : RoomDatabase() {
 
     abstract fun getDao(): CityDao
