@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, MainViewModelFactory(this)).get(MainViewModel::class.java)
         val weatherAdapter = MainWeatherAdapter(this)
         weatherAdapter.clickEvent = {
-            val alertDialog = AlertDialog.Builder(this)
+            AlertDialog.Builder(this)
+                    .setMessage("Delete this city?")
                     .setPositiveButton("Delete") { i, n ->
                         viewModel.cityRepository.deleteCity(it.name)
                     }
