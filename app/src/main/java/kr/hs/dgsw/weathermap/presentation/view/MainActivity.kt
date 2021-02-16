@@ -2,13 +2,17 @@ package kr.hs.dgsw.weathermap.presentation.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kr.hs.dgsw.weathermap.R
+import kr.hs.dgsw.weathermap.data.api.CityDatabase
 import kr.hs.dgsw.weathermap.databinding.ActivityMainBinding
 import kr.hs.dgsw.weathermap.presentation.view_model.MainViewModel
 import kr.hs.dgsw.weathermap.presentation.view_model_factory.MainViewModelFactory
@@ -36,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.cityRepository.signal.observe(this, {
             viewModel.fetchWeatherList()
+            Log.d("Weather", "${viewModel.weatherList.value?.size}")
             viewModel.weatherList.observe(this, {
                 weatherAdapter.submitList(it.sortedBy { it.id })
             })
@@ -49,11 +54,15 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton("ADD") { i, n ->
                         val isValid = viewModel.isValidCity(cityName.text.toString())
                         isValid.observe(this, {
-                            if (it) {
+                            if (it == true) {
                                 viewModel.cityRepository.addCity(cityName.text.toString())
+                            } else if (it == false) {
+                                Toast.makeText(this, "ThisCity isn't valid name", Toast.LENGTH_SHORT).show()
                             } else {
-                                Toast.makeText(this, "thisCity isn't valid name", Toast.LENGTH_SHORT).show()
+                                return@observe
                             }
+                            viewModel.resetValidValue()
+                            isValid.removeObservers(this)
                         })
                     }
                     .setNegativeButton("Cancel") { i, n -> }

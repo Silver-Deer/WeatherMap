@@ -12,7 +12,7 @@ import kr.hs.dgsw.weathermap.data.repository.WeatherRepository
 
 class MainViewModel(private val context: Context) : ViewModel() {
     val cityRepository = CityRepository(context)
-    private val weatherRepository = WeatherRepository()
+    val weatherRepository = WeatherRepository()
 
     val myCities: LiveData<List<City>> = cityRepository.getMyCities()
 
@@ -21,6 +21,11 @@ class MainViewModel(private val context: Context) : ViewModel() {
     fun isValidCity(city: String): LiveData<Boolean> {
         return weatherRepository.isValidCity(city)
     }
+
+    fun resetValidValue() {
+        weatherRepository.resetValidValue()
+    }
+
 
 
     fun fetchWeatherList() {

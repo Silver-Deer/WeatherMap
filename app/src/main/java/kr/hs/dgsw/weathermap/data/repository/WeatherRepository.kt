@@ -28,4 +28,8 @@ class WeatherRepository {
         return weatherRemoteDataSource.weatherResponseList
     }
 
+    fun resetValidValue() {
+        weatherRemoteDataSource.resetValidValue()
+    }
+
 }

@@ -92,5 +92,9 @@ class WeatherRemoteDataSource {
         }
     }
 
+    fun resetValidValue() {
+        _isValidCity.value = null
+    }
+
 
 }

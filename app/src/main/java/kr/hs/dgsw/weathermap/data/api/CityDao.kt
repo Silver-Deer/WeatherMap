@@ -19,4 +19,7 @@ interface CityDao {
 
     @Query("DELETE FROM City WHERE city == :city")
     fun deleteCityByName(city: String): Completable
+
+    @Query("DELETE FROM City")
+    fun deleteAllCity(): Completable
 }
