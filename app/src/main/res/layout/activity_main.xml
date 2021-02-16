@@ -14,20 +14,36 @@
             type="kr.hs.dgsw.weathermap.presentation.view.MainWeatherAdapter" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".presentation.view.MainActivity">
+        android:layout_height="match_parent">
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            adapter="@{adapter}"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_weather" />
+            android:orientation="vertical"
+            tools:context=".presentation.view.MainActivity">
 
-    </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                adapter="@{adapter}"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_weather" />
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_add_city"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|end"
+            android:backgroundTint="@color/teal_200"
+            android:layout_margin="40dp"
+            android:gravity="center" />
+
+    </FrameLayout>
 </layout>

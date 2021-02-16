@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.common.collect.Lists
 import kr.hs.dgsw.weathermap.R
 import kr.hs.dgsw.weathermap.data.data_source.CityLocalDataSource
@@ -45,6 +46,10 @@ class MainActivity : AppCompatActivity() {
                 weatherAdapter.submitList(it.sortedBy { it.id })
             })
         })
+
+        findViewById<FloatingActionButton>(R.id.btn_add_city).setOnClickListener {
+
+        }
 
 
     }
