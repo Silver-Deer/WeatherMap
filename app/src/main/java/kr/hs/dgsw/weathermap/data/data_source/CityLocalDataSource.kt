@@ -66,7 +66,7 @@ class CityLocalDataSource(private val context: Context) {
         }
     }
 
-    fun deleteCity(city: String) {
+    fun deleteCity(city: String, signal: MutableLiveData<Unit>) {
 
         try {
             CityDatabase.getInstance(context.applicationContext)?.getDao()?.deleteCityByName(city)
@@ -74,6 +74,7 @@ class CityLocalDataSource(private val context: Context) {
                     ?.observeOn(AndroidSchedulers.mainThread())
                     ?.subscribe({
                         Log.d("City", "Delete ${city}")
+                        getMyCities(signal)
                     }, {
                         if (it is SQLException)
                             Log.d("City Error", "${it.sqlState} : ${it.message}")

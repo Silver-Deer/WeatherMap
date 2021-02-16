@@ -23,4 +23,9 @@ class MainViewModel(private val context: Context) : ViewModel() {
             weatherList = weatherRepository.getWeathers(it)
         }
     }
+
+    fun refreshCities() {
+        cityRepository.getMyCities()
+    }
+
 }

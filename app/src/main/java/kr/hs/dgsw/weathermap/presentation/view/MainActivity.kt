@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.common.collect.Lists
@@ -23,6 +24,16 @@ class MainActivity : AppCompatActivity() {
         val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         val viewModel = ViewModelProvider(this, MainViewModelFactory(this)).get(MainViewModel::class.java)
         val weatherAdapter = MainWeatherAdapter(this)
+        weatherAdapter.clickEvent = {
+            val alertDialog = AlertDialog.Builder(this)
+                    .setPositiveButton("Delete") { i, n ->
+                        viewModel.cityRepository.deleteCity(it.name)
+                    }
+                    .setNegativeButton("Cancel") { i, n ->
+
+                    }
+                    .show()
+        }
         binding.vm = viewModel
         binding.adapter = weatherAdapter
         binding.lifecycleOwner = this
@@ -33,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                 weatherAdapter.submitList(it.sortedBy { it.id })
             })
         })
+
 
     }
 }

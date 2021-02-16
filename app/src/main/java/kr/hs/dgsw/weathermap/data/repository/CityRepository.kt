@@ -20,6 +20,6 @@ class CityRepository(private val context: Context) {
     }
 
     fun deleteCity(city: String) {
-        cityLocalDataSource.deleteCity(city)
+        cityLocalDataSource.deleteCity(city, signal)
     }
 }
