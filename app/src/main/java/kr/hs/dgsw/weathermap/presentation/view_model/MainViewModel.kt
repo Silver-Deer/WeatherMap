@@ -18,6 +18,11 @@ class MainViewModel(private val context: Context) : ViewModel() {
 
     lateinit var weatherList: LiveData<List<WeatherResponse>>
 
+    fun isValidCity(city: String): LiveData<Boolean> {
+        return weatherRepository.isValidCity(city)
+    }
+
+
     fun fetchWeatherList() {
         myCities.value?.let {
             weatherList = weatherRepository.getWeathers(it)

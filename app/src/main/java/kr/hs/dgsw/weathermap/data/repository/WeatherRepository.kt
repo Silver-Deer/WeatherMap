@@ -15,6 +15,12 @@ class WeatherRepository {
         return weatherRemoteDataSource.weatherResponse
     }
 
+    fun isValidCity(city: String): LiveData<Boolean> {
+        weatherRemoteDataSource.getWeather(city)
+
+        return weatherRemoteDataSource.isValidCity
+    }
+
     fun getWeathers(cities: List<City>): LiveData<List<WeatherResponse>> {
         weatherRemoteDataSource.resetList()
         weatherRemoteDataSource.getWeatherList(cities)

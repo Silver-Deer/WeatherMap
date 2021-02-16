@@ -44,7 +44,7 @@ class CityLocalDataSource(private val context: Context) {
         }
     }
 
-    fun addCity(s: String) {
+    fun addCity(s: String, signal: MutableLiveData<Unit>) {
         val city = City(0, s)
 
         try {
@@ -53,6 +53,7 @@ class CityLocalDataSource(private val context: Context) {
                     ?.observeOn(AndroidSchedulers.mainThread())
                     ?.subscribe({
                         Log.d("City", "Insert ${city.city}")
+                        getMyCities(signal)
                     }, {
                         if (it is SQLException)
                             Log.d("City Error", "${it.sqlState} : ${it.message}")

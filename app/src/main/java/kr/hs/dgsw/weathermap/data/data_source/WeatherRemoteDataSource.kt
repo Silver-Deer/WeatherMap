@@ -22,6 +22,9 @@ class WeatherRemoteDataSource {
     val weatherResponseList: LiveData<List<WeatherResponse>>
         get() = __weatherResponseList
 
+    private val _isValidCity = MutableLiveData<Boolean>()
+    val isValidCity: LiveData<Boolean>
+        get() = _isValidCity
 
     fun resetList() {
         _weatherResponseList.value = ArrayList()
@@ -38,6 +41,7 @@ class WeatherRemoteDataSource {
                             .subscribe(
                                     {
                                         _weatherResponse.value = it
+                                        _isValidCity.value = true
                                     },
                                     {
                                         if (it is HttpException) {
@@ -47,6 +51,7 @@ class WeatherRemoteDataSource {
                                                             ErrorResponse::class.java.annotations
                                                     ).convert(it.response()?.errorBody())
                                             Log.d("Weather Error", "${error?.cod}:${error?.message}")
+                                            _isValidCity.value = false
                                         } else Log.d("Weather Error", "${it.message}")
                                     }
                             )

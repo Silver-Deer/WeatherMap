@@ -16,7 +16,7 @@ class CityRepository(private val context: Context) {
     }
 
     fun addCity(city: String) {
-        cityLocalDataSource.addCity(city)
+        cityLocalDataSource.addCity(city, signal)
     }
 
     fun deleteCity(city: String) {

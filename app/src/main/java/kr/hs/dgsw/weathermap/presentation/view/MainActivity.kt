@@ -2,22 +2,16 @@ package kr.hs.dgsw.weathermap.presentation.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.common.collect.Lists
 import kr.hs.dgsw.weathermap.R
-import kr.hs.dgsw.weathermap.data.data_source.CityLocalDataSource
-import kr.hs.dgsw.weathermap.data.model.entity.Weather
-import kr.hs.dgsw.weathermap.data.model.response_model.WeatherResponse
-import kr.hs.dgsw.weathermap.data.repository.CityRepository
 import kr.hs.dgsw.weathermap.databinding.ActivityMainBinding
 import kr.hs.dgsw.weathermap.presentation.view_model.MainViewModel
 import kr.hs.dgsw.weathermap.presentation.view_model_factory.MainViewModelFactory
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +42,22 @@ class MainActivity : AppCompatActivity() {
         })
 
         findViewById<FloatingActionButton>(R.id.btn_add_city).setOnClickListener {
-
+            val cityName = EditText(this)
+            AlertDialog.Builder(this)
+                    .setMessage("Add city name")
+                    .setView(cityName)
+                    .setPositiveButton("ADD") { i, n ->
+                        val isValid = viewModel.isValidCity(cityName.text.toString())
+                        isValid.observe(this, {
+                            if (it) {
+                                viewModel.cityRepository.addCity(cityName.text.toString())
+                            } else {
+                                Toast.makeText(this, "thisCity isn't valid name", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                    }
+                    .setNegativeButton("Cancel") { i, n -> }
+                    .show()
         }
 
 
